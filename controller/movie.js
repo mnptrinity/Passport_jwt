@@ -42,3 +42,106 @@ module.exports.gettinggenre=function(genre_id,res){
         }
     });
 }
+
+
+module.exports.deletemovie=(req,res)=>{
+    Movie.findById(req.params.id).then(result=>{
+        return res
+        .status(200)
+        .json({
+            message:"Deleted successful...",
+            Result:result
+        });
+    })
+    .catch(err=>{
+        return res
+        .status(200)
+        .json({
+            message:"Movie Not Found!",
+            Result:err
+        });
+    })
+}
+
+
+module.exports.allmovies=(req,res)=>{
+        Movie.find().populate('genre').then(result=>{
+        return res
+        .status(200)
+        .json({
+            message:"Movie List : ",
+            Result:result
+        });
+    })
+    .catch(err=>{
+        return res
+        .status(200)
+        .json({
+            message:"Movie List Not Found ",
+            Result:err
+        });
+    });
+}
+
+
+
+module.exports.deletemovie=(req,res)=>{
+    Movie.findByIdAndDelete(req.params.id).then(result=>{
+        return res
+        .status(200)
+        .json({
+            message:"Movie Deleted Successfully.!",
+            Result:result
+        });
+    })
+    .catch(err=>{
+        return res
+        .status(200)
+        .json({
+            message:"Movie  Not Found ",
+            Result:err
+        });
+    })
+}
+
+
+module.exports.updatedescription=(req,res)=>{
+    Movie.findByIdAndUpdate(req.params.id,{$set :{
+        decsription:req.body.decsription
+    }},(err,data)=>{
+        if(err)
+        return res
+        .status(200)
+        .json({
+            message:"Movie Not Found...!",
+            Result:err
+        })
+        else
+        return res
+        .status(200)
+        .json({
+            message:"Movie Description Upated successfully!",
+            Result:data
+        })
+    });
+}
+
+
+module.exports.updatemovie=(req,res)=>{
+    Movie.findByIdAndUpdate(req.params.id,{$set :req.body},{upsert:true},(err,data)=>{
+        if(err)
+        return res
+        .status(200)
+        .json({
+            message:"Movie Not Found...!",
+            Result:err
+        })
+        else
+        return res
+        .status(200)
+        .json({
+            message:"Movie  Upated successfully!",
+            Result:data
+        })
+    });
+}
